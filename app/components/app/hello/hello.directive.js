@@ -1,6 +1,6 @@
 import HelloTemplate from './hello.html';
 
-var HelloDirective = () => {
+var HelloDirective = function() {
     return {
         restrict: 'E',
         template: HelloTemplate,

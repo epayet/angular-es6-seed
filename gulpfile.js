@@ -20,6 +20,7 @@ var concatCss   = require('gulp-concat-css');
 var minifyCSS   = require('gulp-minify-css');
 var es          = require('event-stream');
 var size        = require('gulp-size');
+var envify      = require('envify/custom');
 
 var port = 8000;
 var environment = process.env.ENVIRONMENT || 'LOCAL';
@@ -55,6 +56,8 @@ gulp.task("js", ['lint', 'clean'], function() {
     return browserify('./app/init.js')
         .transform(babelify)
         .transform(stringify(['.html']))
+        .transform(envify({ENVIRONMENT: environment}))
+        //.transform(envify({ENVIRONMENT: environment}))
         .bundle()
         .pipe(source('init.js'))
         .pipe(buffer())

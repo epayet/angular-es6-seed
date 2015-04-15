@@ -33,7 +33,7 @@ module.exports = function(config) {
 
     browserify: {
       debug: true,
-      transform: [ 'babelify', 'stringify']
+      transform: [ 'babelify', 'stringify', ['envify', {ENVIRONMENT: 'test'}]]
     },
 
 

@@ -1,8 +1,8 @@
 import HelloController from './hello.controller.js';
 
-describe('Toto', () => {
-    describe('Controller', () => {
-        it('should say hello', () => {
+describe('Toto', function() {
+    describe('Controller', function() {
+        it('should say hello', function() {
             class HelloServiceMock {
                 sayHello () {
                     return 'mockHello';
