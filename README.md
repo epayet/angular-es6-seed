@@ -15,3 +15,4 @@ http://benclinkinbeard.com/talks/2014/ng-conf
 
 es6
 http://cameronjroe.com/code/angular-movie-search/
+http://es6-features.org

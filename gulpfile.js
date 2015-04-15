@@ -30,11 +30,11 @@ var paths = {
     appCss: "app/**/*.css"
 };
 
-gulp.task("default", function(callback) {
-    runSequence("build", ["serve", "watch"], callback);
-});
+gulp.task("default", ['build', 'serve']);
 
-gulp.task("build", ["js", "vendorjs" , "css", "copy"]);
+gulp.task("build", function(callback) {
+    runSequence("clean", ["js", "vendorjs" , "css", 'vendorcss', "copy"], callback);
+});
 
 gulp.task('lint', function () {
     return gulp.src(paths.appScripts)
@@ -42,7 +42,7 @@ gulp.task('lint', function () {
         .pipe(jshint.reporter('jshint-stylish'));
 });
 
-gulp.task('vendorjs', ['clean'], function () {
+gulp.task('vendorjs', function () {
     return gulp.src('./app/*.html')
         .pipe(usemin({
             html: [gulpif(environment == 'PROD', minifyHtml())],
@@ -52,12 +52,11 @@ gulp.task('vendorjs', ['clean'], function () {
         .pipe(gulp.dest('dist'));
 });
 
-gulp.task("js", ['lint', 'clean'], function() {
+gulp.task("js", ['lint'], function() {
     return browserify('./app/init.js')
         .transform(babelify)
         .transform(stringify(['.html']))
         .transform(envify({ENVIRONMENT: environment}))
-        //.transform(envify({ENVIRONMENT: environment}))
         .bundle()
         .pipe(source('init.js'))
         .pipe(buffer())
@@ -67,14 +66,22 @@ gulp.task("js", ['lint', 'clean'], function() {
         .pipe(gulp.dest('dist/scripts'));
 });
 
-gulp.task("css", ['clean'], function() {
+gulp.task("css", function() {
     return gulp.src(paths.appCss)
-        .pipe(concatCss("app.min.css"))
+        .pipe(concatCss("app.css"))
         .pipe(gulpif(environment == 'PROD', minifyCSS({keepSpecialComments: 0})))
         .pipe(gulp.dest("dist/css"));
 });
 
-gulp.task("copy", ['clean'], function() {
+gulp.task('vendorcss', function () {
+    return gulp.src('./app/*.html')
+        .pipe(usemin({
+            vendorcss: [gulpif(environment == 'PROD', minifyCSS({keepSpecialComments: 0})), 'concat']
+        }))
+        .pipe(gulp.dest('build/'));
+});
+
+gulp.task("copy", function() {
     return es.merge(
         gulp.src("app/**/*.html").pipe(gulp.dest("dist")),
         gulp.src("app/assets/**").pipe(gulp.dest("dist/assets"))
@@ -84,6 +91,15 @@ gulp.task("copy", ['clean'], function() {
 
 gulp.task('clean', function () {
     return gulp.src('dist')
+        .pipe(clean());
+});
+
+gulp.task("build:mobile", ["clean:mobile", "build"], function() {
+    return gulp.src('dist/**').pipe(gulp.dest('mobile/www'));
+});
+
+gulp.task('clean:mobile', function () {
+    return gulp.src('mobile/www')
         .pipe(clean());
 });
 
@@ -97,7 +113,7 @@ gulp.task('test', function() {
         });
 });
 
-gulp.task('serve', function() {
+gulp.task('serve', ['build'], function() {
     return browserSync({
         notify: false,
         server: {
