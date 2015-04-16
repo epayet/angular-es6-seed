@@ -27,7 +27,8 @@ var environment = process.env.ENVIRONMENT || 'LOCAL';
 
 var paths = {
     appScripts: ['app/**/*.js', '!app/**/*.spec.js'],
-    appCss: "app/**/*.css"
+    appCss: "app/**/*.css",
+    appFonts: 'app/fonts/**'
 };
 
 gulp.task("default", ['build', 'serve']);
@@ -84,8 +85,8 @@ gulp.task('vendorcss', function () {
 gulp.task("copy", function() {
     return es.merge(
         gulp.src("app/**/*.html").pipe(gulp.dest("dist")),
-        gulp.src("app/assets/**").pipe(gulp.dest("dist/assets"))
-        //gulp.src(paths.appFonts).pipe(gulp.dest("dist/fonts"))
+        gulp.src("app/assets/**").pipe(gulp.dest("dist/assets")),
+        gulp.src(paths.appFonts).pipe(gulp.dest("dist/fonts"))
     );
 });
 
