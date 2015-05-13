@@ -22,16 +22,17 @@ var es          = require('event-stream');
 var size        = require('gulp-size');
 var envify      = require('envify/custom');
 
-var port = 8000;
+var port = 8001;
 var environment = process.env.ENVIRONMENT || 'LOCAL';
 
 var paths = {
     appScripts: ['app/**/*.js', '!app/**/*.spec.js'],
-    appCss: "app/**/*.css",
-    appFonts: 'app/fonts/**'
+    appCss: "app/**/*.css"
 };
 
-gulp.task("default", ['build', 'serve']);
+gulp.task("default", function(callback) {
+    runSequence("build", ["serve", "watch"], callback);
+});
 
 gulp.task("build", function(callback) {
     runSequence("clean", ["js", "vendorjs" , "css", 'vendorcss', "copy"], callback);
@@ -79,14 +80,14 @@ gulp.task('vendorcss', function () {
         .pipe(usemin({
             vendorcss: [gulpif(environment == 'PROD', minifyCSS({keepSpecialComments: 0})), 'concat']
         }))
-        .pipe(gulp.dest('build/'));
+        .pipe(gulp.dest('dist/css'));
 });
 
 gulp.task("copy", function() {
     return es.merge(
         gulp.src("app/**/*.html").pipe(gulp.dest("dist")),
-        gulp.src("app/assets/**").pipe(gulp.dest("dist/assets")),
-        gulp.src(paths.appFonts).pipe(gulp.dest("dist/fonts"))
+        gulp.src("app/assets/**").pipe(gulp.dest("dist/assets"))
+        //gulp.src(paths.appFonts).pipe(gulp.dest("dist/fonts"))
     );
 });
 
@@ -114,7 +115,7 @@ gulp.task('test', function() {
         });
 });
 
-gulp.task('serve', ['build'], function() {
+gulp.task('serve', function() {
     return browserSync({
         notify: false,
         server: {
@@ -125,10 +126,45 @@ gulp.task('serve', ['build'], function() {
 });
 
 gulp.task('watch', ['serve'], function() {
-    gulp.watch([
-        paths.appCss,
-        paths.appScripts,
-        "app/**/*.html",
-        "app/assets/**"
-    ], ["build", reload]);
+    gulp.watch('app/**', ["build", reload]);
+});
+
+
+var webdriver_update = require('gulp-protractor').webdriver_update;
+var protractor = require("gulp-protractor").protractor;
+var to5 = require('gulp-babel');
+var plumber = require('gulp-plumber');
+
+paths.e2eSpecsSrc = 'e2e/src/**/*.js';
+paths.e2eSpecsDist = 'e2e/dist/';
+
+// for full documentation of gulp-protractor,
+// please check https://github.com/mllrsohn/gulp-protractor
+gulp.task('webdriver_update', webdriver_update);
+
+gulp.task('clean:e2e', function () {
+    return gulp.src(paths.e2eSpecsDist)
+        .pipe(clean());
+});
+
+// transpiles files in
+// /test/e2e/src/ from es6 to es5
+// then copies them to test/e2e/dist/
+gulp.task('build-e2e', ['clean:e2e'], function () {
+    return gulp.src(paths.e2eSpecsSrc)
+        .pipe(plumber())
+        .pipe(to5())
+        .pipe(gulp.dest(paths.e2eSpecsDist));
+});
+
+// runs build-e2e task
+// then runs end to end tasks
+// using Protractor: http://angular.github.io/protractor/
+gulp.task('e2e', ['webdriver_update', 'build-e2e'], function(cb) {
+    return gulp.src(paths.e2eSpecsDist + "/**/*.spec.js")
+        .pipe(protractor({
+            configFile: "protractor.conf.js",
+            args: ['--baseUrl', 'http://127.0.0.1:9000']
+        }))
+        .on('error', function(e) { throw e; });
 });

@@ -1,4 +1,4 @@
-var constants = {
+const constants = {
     'LOCAL': {
         apiUrl: "http://localhost:8080"
     },

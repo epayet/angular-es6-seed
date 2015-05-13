@@ -1,6 +1,7 @@
-import config from './app.config.js';
 import appComponents from './components/app/app.components.js';
+import config from './app.config.js';
 import constants from './app.constants.js';
+import run from './app.run.js';
 
 export default angular.module('app', [
         'ngRoute',
@@ -8,8 +9,8 @@ export default angular.module('app', [
     ])
     .config(config)
     .constant('Constants', constants)
+    .run(run)
     .controller('DefaultController', function ($scope, $routeParams) {
-        //console.log($routeParams);
         $scope.$routeParams = $routeParams;
     })
 ;

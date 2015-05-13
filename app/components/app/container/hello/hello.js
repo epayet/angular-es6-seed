@@ -3,7 +3,7 @@ import HelloController from './hello.controller.js';
 import HelloService from './hello.service.js';
 
 export default angular.module('app.hello', [])
-    .directive('hello', HelloDirective)
+    .directive('helloContainer', HelloDirective)
     .controller('HelloController', HelloController)
     .service('helloService', HelloService)
 ;
