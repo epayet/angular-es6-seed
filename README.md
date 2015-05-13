@@ -1,8 +1,62 @@
 # AngularJS 1.X Seed with ES6, component based
 
-##Description
+## Description
 
-This project is a seed to get started with angular 1.X written in ES6 with the component pattern.
+This project is a seed to get started with angular 1.X written in ES6 with the component pattern. 
+Possibility to make a mobile application using cordova or even an accelerated webview with cocoonjs.
+
+## Dependencies
+
+* nodejs/npm
+* gulp
+* bower
+
+`npm install -g bower gulp`
+
+## Run the application
+
+`gulp`
+
+## Directory layout
+
+TODO
+
+## Running on mobile
+
+### Dependencies
+
+* cordova
+* cocoonjs
+
+`npm install -g cordova cocoonjs`
+
+### Running
+
+See package.json scripts. First, add a platform, copy the files to mobile/www and then run cordova. Or simplified:
+
+Add android platform:
+`npm run-script redeploy-android`
+
+Run on mobile:
+`npm run-script mobile`
+
+## Testing
+
+### Unit tests
+
+#### Dependencies
+
+* karma
+
+`npm install -g karma-cli`
+
+#### Run the unit tests
+
+`npm test`
+
+### E2E tests
+
+`gulp e2e`
 
 ## Useful links
 
@@ -18,8 +72,10 @@ This project is a seed to get started with angular 1.X written in ES6 with the c
 * http://rangle.io/blog/how-to-embrace-angular-2-today-with-future-friendly-angular-1-3/
 
 ### Browserify
+
 http://benclinkinbeard.com/talks/2014/ng-conf
 
 ### ES6 itself
-http://cameronjroe.com/code/angular-movie-search/
-http://es6-features.org
+
+* http://cameronjroe.com/code/angular-movie-search/
+* http://es6-features.org
