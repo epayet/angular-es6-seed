@@ -8,7 +8,7 @@ This project is a seed to get started with angular 1.X written in ES6 with the c
 
 ### Angular with ES6
 
-* (http://cameronjroe.com/code/angular-movie-search/)
+* http://cameronjroe.com/code/angular-movie-search/
 * http://busypeoples.github.io/post/testing-angular-es6/
 * http://www.michaelbromley.co.uk/blog/350/exploring-es6-classes-in-angularjs-1-x
 * https://github.com/michaelbromley/angular-es6
