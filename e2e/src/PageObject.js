@@ -1,6 +1,8 @@
 class PageObject {
-    constructor() {
-        this.get()
+    constructor(getPage) {
+        if(getPage || getPage === undefined) {
+            this.get();
+        }
     }
 
     get(url) {

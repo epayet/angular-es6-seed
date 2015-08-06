@@ -1,13 +1,17 @@
 {
-  "name": "Pokt",
+  "name": "angular-es6-seed",
   "version": "0.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "install-plugins": "cd mobile && cordova plugin add https://github.com/apache/cordova-plugin-camera.git && cordova plugin add https://github.com/apache/cordova-plugin-splashscreen.git && cordova plugin add de.appplant.cordova.plugin.local-notification",
     "test": "karma start --single-run --browsers PhantomJS",
-    "mobile": "adb uninstall fr.cdiscount.pokt && gulp build:mobile && cd mobile && cocoonjs run",
+    "android": "adb uninstall fr.cdiscount.pokt && gulp build:mobile && cd mobile && cocoonjs run android",
+    "ios": "gulp build:mobile && cd mobile && cocoonjs build ios",
     "clean": "cd mobile && rm -rf platforms plugins hooks && mkdir hooks && echo 'dummy' > hooks/dummy",
-    "redeploy-android": "npm run-script clean && cd mobile && cocoonjs platform add android",
+    "redeploy": "npm run-script clean && npm run-script install-plugins",
+    "redeploy-android": "npm run-script redeploy && cd mobile && cocoonjs platform add android",
+    "redeploy-ios": "npm run-script redeploy && cd mobile && cocoonjs platform add ios && cordova plugin add de.appplant.cordova.plugin.hidden-statusbar-overlay",
     "redeploy-android-webviewplus": "npm run-script redeploy-android && cd mobile && cocoonjs plugin add com.ludei.webview.plus"
   },
   "repository": {},
