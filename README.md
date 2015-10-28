@@ -2,7 +2,7 @@
 
 ## Description
 
-This project is a seed to get started with angular 1.X written in ES6 with the component pattern. 
+This project is my opiniated seed to get started with angular 1.X written in ES6 with the component pattern. 
 Possibility to make a mobile application using cordova or even an accelerated webview with cocoonjs.
 
 ## Technologies used
